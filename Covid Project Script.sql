@@ -60,18 +60,21 @@ Order by 2 DESC
 
 
 --Continents with the Highest Death Counts
-Select Location, MAX(cast(total_deaths as int)) as Death_Count
+Select Location, date, MAX(cast(total_deaths as int)) as Death_Count
 From CovidProject..CovidDeaths$
 Where continent IS NULL
-Group by Location
-Order by 2 DESC
+and Location not in ('World', 'European Union', 'International', 'Upper middle income', 
+'High income', 'Lower middle income', 'Low income')
+Group by Location, date
+Order by 3 DESC
 
---Continents with the Highest Death Counts w/o world
-Select continent, MAX(cast(total_deaths as int)) as Death_Count
+--Death Counts compared to socio-economic status
+Select Location, date, MAX(cast(total_deaths as int)) as Death_Count
 From CovidProject..CovidDeaths$
-Where continent is NOT NULL
-Group by continent
-Order by 2 DESC
+Where continent IS NULL
+and Location not in ('World', 'European Union', 'International', 'North America', 'South America', 'Asia', 'Africa', 'Europe', 'Oceania')
+Group by Location, date
+Order by 3 DESC
 
 --Global Breakdown
 Select SUM(new_cases) AS Global_Total_Cases, SUM(cast(new_deaths as int)) AS Global_Total_Deaths, SUM(cast(new_deaths as int))/SUM(new_cases)*100 AS Death_Percentage
